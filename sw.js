@@ -3,7 +3,7 @@
  * assets are served fast from cache and refreshed in the background.
  * Map tiles are cross-origin and left to the browser (need internet).
  */
-const CACHE = 'rome-trip-v4';
+const CACHE = 'rome-trip-v5';
 
 const ASSETS = [
   './',

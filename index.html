@@ -83,7 +83,8 @@
 <script>
 const DATA = [
 {day:1,date:"Sat Sep 13",title:"Ancient Rome",stops:[
-  {id:"d1s1",name:"Colosseum",time:"9:00 AM",lat:41.8902102,lng:12.4922309,q:"Colosseo, Roma",note:"Exterior free; book interior ticket ahead.",metro:{station:"Colosseo",line:"B"},
+  {id:"d1home",name:"🏠 Base · Viale Giulio Agricola 33",time:"8:15 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Your apartment in Tuscolano. 2 min walk to Metro A ‘Giulio Agricola’. For the Colosseum: Line A to Termini, change to Line B (dir. Laurentina), off at Colosseo.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
+  {id:"d1s1",name:"Colosseum",time:"9:00 AM",lat:41.8902102,lng:12.4922309,q:"Colosseo, Roma",note:"Exterior free; book interior ticket ahead.",metro:{station:"Colosseo",line:"B"},leg:"Metro A→B, change at Termini · ~30 min",
     food:"Ignore the vans on the piazza — walk 5 min north into Monti for real food and coffee.",
     vegan:"Fatamorgana (Piazza degli Zingari) does vegan gelato; Grezzo Raw Chocolate on Via Urbana for raw vegan cake."},
   {id:"d1s2",name:"Roman Forum & Palatine Hill",time:"10:30 AM",lat:41.8920906,lng:12.4864378,q:"Foro Romano, Roma",note:"Great free views from Via dei Fori Imperiali.",metro:{station:"Colosseo",line:"B"},leg:"walking · ~12 min",
@@ -103,7 +104,8 @@ const DATA = [
     vegan:"Limited here — spaghetti al pomodoro, puntarelle in season, bruschetta. For a full vegan meal go to Pizzeria Ai Marmi (vegan marinara) 6 min away, or Grezzo Raw for dessert."}
 ]},
 {day:2,date:"Sun Sep 14",title:"Vatican",stops:[
-  {id:"d2s1",name:"St Peter's Basilica",time:"8:00 AM",lat:41.9021667,lng:12.4539367,q:"Basilica di San Pietro, Vaticano",note:"Free entry — dress code applies.",metro:{station:"Ottaviano-San Pietro",line:"A"},
+  {id:"d2home",name:"🏠 Base · Viale Giulio Agricola 33",time:"7:15 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Easy today: Metro A ‘Giulio Agricola’ direct to ‘Ottaviano–San Pietro’ (dir. Battistini), no changes. Leave early to beat the St Peter's security queue.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
+  {id:"d2s1",name:"St Peter's Basilica",time:"8:00 AM",lat:41.9021667,lng:12.4539367,q:"Basilica di San Pietro, Vaticano",note:"Free entry — dress code applies.",metro:{station:"Ottaviano-San Pietro",line:"A"},leg:"Metro A direct to Ottaviano · ~30 min",
     food:"Nothing good by the colonnade; the Borgo Pio pedestrian lane (3 min) has cafés.",
     vegan:"Universo Vegano on Via Leone IV — quick vegan panini and bowls, ~8 min."},
   {id:"d2s2",name:"Vatican Museums & Sistine Chapel",time:"10:00 AM",lat:41.9064878,lng:12.4536413,q:"Musei Vaticani, Vaticano",note:"Paid — book a timed ticket ahead of time.",metro:{station:"Cipro",line:"A"},leg:"walking · ~8 min",
@@ -120,7 +122,8 @@ const DATA = [
     metro:{station:"Ottaviano-San Pietro",line:"A"},walkNote:"~9 min from Castel Sant'Angelo",leg:"walking · ~9 min"}
 ]},
 {day:3,date:"Mon Sep 15",title:"Centro Storico & Villa Borghese",stops:[
-  {id:"d3s1",name:"Trevi Fountain",time:"8:00 AM",lat:41.9009325,lng:12.4833130,q:"Fontana di Trevi, Roma",note:"Go before 8am to beat the crowds.",metro:{station:"Barberini",line:"A"},walkNote:"~10 min walk",
+  {id:"d3home",name:"🏠 Base · Viale Giulio Agricola 33",time:"7:20 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Metro A ‘Giulio Agricola’ direct to ‘Barberini’ (dir. Battistini), then 4 min downhill to the Trevi Fountain.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
+  {id:"d3s1",name:"Trevi Fountain",time:"8:00 AM",lat:41.9009325,lng:12.4833130,q:"Fontana di Trevi, Roma",note:"Go before 8am to beat the crowds.",metro:{station:"Barberini",line:"A"},walkNote:"~4 min from Barberini",leg:"Metro A direct to Barberini · ~22 min",
     food:"Everything at the fountain is overpriced — walk toward the Pantheon to eat.",
     vegan:"Venchi on Via degli Orfani has vegan gelato and sorbet."},
   {id:"d3s2",name:"Pantheon",time:"9:00 AM",lat:41.8986108,lng:12.4768729,q:"Pantheon, Roma",note:"Free entry, famous oculus.",metro:null,walkNote:"~10 min walk from Trevi",leg:"walking · ~10 min",
@@ -132,6 +135,10 @@ const DATA = [
   {id:"d3s4",name:"Spanish Steps",time:"12:00 PM",lat:41.9059900,lng:12.4827750,q:"Piazza di Spagna, Roma",note:"Free to climb.",metro:{station:"Spagna",line:"A"},leg:"walking · ~15 min",
     food:"Via della Croce and Via Margutta have the restaurants.",
     vegan:"Il Margutta (veg institution) and Ginger on Via Borgognona."},
+  {id:"d3five",name:"Five Guys · Via del Tritone",time:"12:30 PM",lat:41.9016,lng:12.4855,meal:true,q:"Five Guys, Via del Tritone, Roma",
+    note:"American burgers a 3-min walk from the Trevi Fountain, across from La Rinascente — Rome's most central Five Guys. Counter service, packed at lunch, card or cash.",
+    vegan:"Thin pickings: the ‘veggie sandwich’ is grilled veg with no patty; the fries are cooked in peanut oil and are vegan. Il Margutta (all-veg, sit-down) is ~10 min north if you want more.",
+    metro:{station:"Barberini",line:"A"},walkNote:"~3 min from Trevi",leg:"walking · ~8 min back toward Trevi"},
   {id:"d3s5",name:"Piazza del Popolo",time:"1:00 PM",lat:41.9110163,lng:12.4762093,q:"Piazza del Popolo, Roma",note:"Free monumental square.",metro:{station:"Flaminio",line:"A"},leg:"walking · ~10 min",
     food:"Rosati and Canova on the square are historic but pricey.",
     vegan:"Il Margutta is 5 min south-east; Pompi does a vegan tiramisù to go."},
@@ -148,7 +155,8 @@ const DATA = [
     metro:null,walkNote:"next to the Pantheon",leg:"walking · ~10 min from the Pincio"}
 ]},
 {day:4,date:"Tue Sep 16",title:"Trastevere, Janiculum & Testaccio",stops:[
-  {id:"d4s1",name:"Janiculum Hill",time:"9:30 AM",lat:41.8914697,lng:12.4613942,q:"Piazzale Giuseppe Garibaldi, Roma",note:"Wide free panoramic view, less crowded.",metro:null,walkNote:"Bus 115 from Trastevere, or 20 min walk",
+  {id:"d4home",name:"🏠 Base · Viale Giulio Agricola 33",time:"8:30 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Trickiest morning: Metro A to Termini, then tram 8 / bus toward Trastevere and bus 115 up the hill — allow ~50 min. A taxi is ~€22 and ~25 min.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
+  {id:"d4s1",name:"Janiculum Hill",time:"9:30 AM",lat:41.8914697,lng:12.4613942,q:"Piazzale Giuseppe Garibaldi, Roma",note:"Wide free panoramic view, less crowded.",metro:null,walkNote:"Bus 115 from Trastevere, or 20 min walk",leg:"Metro A + tram/bus · ~50 min (or taxi ~25 min)",
     food:"Only Bar Gianicolo at the top for coffee and cornetti (the plain ones are usually vegan).",
     vegan:"Save the real meal for Trastevere at the bottom of the hill."},
   {id:"d4s2",name:"Trastevere neighborhood",time:"11:00 AM",lat:41.8848294,lng:12.4704017,q:"Piazza di Santa Maria in Trastevere, Roma",note:"Free to wander — cobbled lanes, Santa Maria church.",metro:null,walkNote:"Tram 8 from Largo Argentina",leg:"tram/walk · ~15 min",
@@ -165,7 +173,8 @@ const DATA = [
     vegan:"The melanzane (eggplant) and cicoria/misticanza trapizzini are vegan; there's another branch at Piazza Trilussa in Trastevere."}
 ]},
 {day:5,date:"Wed Sep 17",title:"Flex Day",stops:[
-  {id:"d5s1",name:"Colosseum (interior, optional)",time:"9:00 AM",lat:41.8902102,lng:12.4922309,q:"Colosseo, Roma",note:"Use your booked interior ticket if you have one.",metro:{station:"Colosseo",line:"B"},
+  {id:"d5home",name:"🏠 Base · Viale Giulio Agricola 33",time:"8:15 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Flex day. For the Colosseum: Metro A to Termini, change to Line B, off at Colosseo. Rifugio Romano and Mercato Centrale later are both a short hop from Termini on Line A.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
+  {id:"d5s1",name:"Colosseum (interior, optional)",time:"9:00 AM",lat:41.8902102,lng:12.4922309,q:"Colosseo, Roma",note:"Use your booked interior ticket if you have one.",metro:{station:"Colosseo",line:"B"},leg:"Metro A→B, change at Termini · ~30 min",
     food:"Afterwards head into Monti for lunch, same as Day 1.",
     vegan:"Fatamorgana or Grezzo Raw for vegan sweets in Monti."},
   {id:"d5s2",name:"Rifugio Romano (lunch)",time:"1:00 PM",lat:41.9044388,lng:12.4995988,note:"Fully vegan — try the carbonara or cacio e pepe.",metro:{station:"Termini",line:"A/B"},walkNote:"~8 min walk",leg:"walking · ~20 min or Metro B",meal:true,q:"Rifugio Romano, Via Volturno 39, Roma",
@@ -206,14 +215,15 @@ function renderMap(day){
     map = L.map(container,{zoomControl:false}).setView([41.895,12.478],13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,
       attribution:'&copy; OpenStreetMap'}).addTo(map);
-    const pts = day.stops.map(s=>[s.lat,s.lng]);
-    const bounds = L.latLngBounds(pts);
+    // frame the day's sightseeing route; the home base can sit far outside it
+    const route = day.stops.filter(s=>!s.home).map(s=>[s.lat,s.lng]);
     day.stops.forEach((s,i)=>{
-      L.circleMarker([s.lat,s.lng],{radius:9,fillColor:s.meal?'#a5672b':'#c1440e',fillOpacity:1,color:'#fff',weight:2})
+      L.circleMarker([s.lat,s.lng],{radius:s.home?7:9,
+        fillColor:s.home?'#2b2320':(s.meal?'#a5672b':'#c1440e'),fillOpacity:1,color:'#fff',weight:2})
         .addTo(map).bindPopup(`<b>${i+1}. ${s.name}</b><br>${s.time}`);
     });
-    L.polyline(pts,{color:'#c1440e',weight:3,dashArray:'6 6',opacity:.7}).addTo(map);
-    map.fitBounds(bounds,{padding:[24,24]});
+    L.polyline(route,{color:'#c1440e',weight:3,dashArray:'6 6',opacity:.7}).addTo(map);
+    map.fitBounds(L.latLngBounds(route),{padding:[24,24]});
     setTimeout(()=>{ try{ map.invalidateSize(); }catch(e){} }, 60);  // fixes grey/half-drawn tiles
   }catch(e){
     console.warn('Map unavailable:', e);
