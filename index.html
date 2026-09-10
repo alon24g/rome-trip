@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Rome Trip</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rome Trip">
+<meta name="theme-color" content="#c1440e">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css"/>
+<style>
+  :root{
+    --terracotta:#c1440e;
+    --ochre:#d99a2b;
+    --cream:#faf3e8;
+    --ink:#2b2320;
+    --card:#ffffff;
+    --border:#e7ddce;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;height:100%;background:var(--cream);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  #app{display:flex;flex-direction:column;height:100dvh;}
+  header{padding:14px 16px calc(10px + env(safe-area-inset-top,0)) 16px;
+    padding-top:calc(14px + env(safe-area-inset-top,0));
+    background:var(--terracotta);color:#fff;flex-shrink:0;}
+  header h1{margin:0 0 2px 0;font-size:19px;font-weight:700;}
+  header p{margin:0;font-size:12.5px;opacity:.9;}
+  nav#tabs{display:flex;overflow-x:auto;gap:6px;padding:10px 12px;background:var(--terracotta);
+    flex-shrink:0;-webkit-overflow-scrolling:touch;}
+  nav#tabs button{flex:0 0 auto;border:none;padding:8px 14px;border-radius:20px;font-size:13px;
+    font-weight:600;background:rgba(255,255,255,.18);color:#fff;white-space:nowrap;}
+  nav#tabs button.active{background:#fff;color:var(--terracotta);}
+  main{flex:1;overflow-y:auto;padding:14px 12px 30px 12px;-webkit-overflow-scrolling:touch;}
+  #daytitle{font-size:15px;font-weight:700;margin:2px 4px 10px 4px;color:var(--terracotta);}
+  #map{width:100%;height:220px;border-radius:14px;margin-bottom:14px;border:1px solid var(--border);}
+  .stop{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;
+    margin-bottom:10px;position:relative;}
+  .stop.done{opacity:.5;}
+  .stop.meal{background:#fff9f0;border-color:#efd9b6;}
+  .stop-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .stop-name{font-size:15.5px;font-weight:700;margin:0;}
+  .stop-time{font-size:12.5px;color:var(--terracotta);font-weight:700;white-space:nowrap;}
+  .stop-note{font-size:12.5px;color:#5a5049;margin:4px 0 8px 0;line-height:1.35;}
+  .stop-food{font-size:12px;color:#6b5f54;margin:0 0 4px 0;line-height:1.38;}
+  .stop-vegan{font-size:12px;color:#3f7d3f;margin:0 0 8px 0;line-height:1.38;}
+  .stop-vegan b{font-weight:700;}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;
+    padding:3px 9px;border-radius:20px;color:#fff;margin-right:6px;margin-bottom:6px;}
+  .badge.walk{background:#8a8478;}
+  .badge.meal{background:#a5672b;}
+  .actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+  .actions a, .actions button{flex:1;min-width:120px;text-align:center;text-decoration:none;
+    font-size:12.5px;font-weight:700;padding:9px 8px;border-radius:10px;border:none;}
+  .btn-map{background:var(--terracotta);color:#fff;}
+  .btn-dir{background:#f0e6d6;color:var(--terracotta);}
+  .check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;
+    border:2px solid var(--border);background:#fff;}
+  .check.checked{background:var(--terracotta);border-color:var(--terracotta);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .leg{text-align:center;font-size:11.5px;color:#8a8072;margin:-2px 0 10px 4px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>🏛️ Rome Trip</h1>
+    <p>Sept 12–18 · Tap a stop to open it in Maps</p>
+  </header>
+  <nav id="tabs"></nav>
+  <main>
+    <div id="daytitle"></div>
+    <div id="map"></div>
+    <div id="stops"></div>
+  </main>
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script>
+const DATA = [
+{day:1,date:"Sat Sep 13",title:"Ancient Rome",stops:[
+  {id:"d1s1",name:"Colosseum",time:"9:00 AM",lat:41.8902102,lng:12.4922309,q:"Colosseo, Roma",note:"Exterior free; book interior ticket ahead.",metro:{station:"Colosseo",line:"B"},
+    food:"Ignore the vans on the piazza — walk 5 min north into Monti for real food and coffee.",
+    vegan:"Fatamorgana (Piazza degli Zingari) does vegan gelato; Grezzo Raw Chocolate on Via Urbana for raw vegan cake."},
+  {id:"d1s2",name:"Roman Forum & Palatine Hill",time:"10:30 AM",lat:41.8920906,lng:12.4864378,q:"Foro Romano, Roma",note:"Great free views from Via dei Fori Imperiali.",metro:{station:"Colosseo",line:"B"},leg:"walking · ~12 min",
+    food:"Terre e Domus on Foro Traiano faces the ruins — regional Lazio cooking and wine.",
+    vegan:"Ask for a vegetable primo without cheese, plus bruschetta al pomodoro."},
+  {id:"d1meal1",name:"Lunch · La Taverna dei Fori Imperiali",time:"12:00 PM",lat:41.8942,lng:12.4884,meal:true,q:"La Taverna dei Fori Imperiali, Via della Madonna dei Monti 9, Roma",
+    note:"Small classic Roman trattoria in Monti, ~6 min uphill from the Forum. Book ahead; closed Tuesdays.",
+    vegan:"Spaghetti al pomodoro, cicoria ripassata (ask for no anchovy), grilled seasonal veg, bruschetta.",
+    metro:null,walkNote:"~6 min from the Forum",leg:"walking · ~6 min"},
+  {id:"d1s3",name:"Circus Maximus",time:"12:30 PM",lat:41.8858762,lng:12.4857578,q:"Circo Massimo, Roma",note:"Free open field, once a chariot stadium.",metro:{station:"Circo Massimo",line:"B"},leg:"walking · ~10 min",
+    food:"Just kiosk bars on the field — save your appetite for Testaccio, 10 min south-west.",
+    vegan:"Casa Manco in Testaccio market does tomato and veg pizza al taglio with no cheese."},
+  {id:"d1s4",name:"Giardino degli Aranci + Aventine Keyhole",time:"1:30 PM",lat:41.8851338,lng:12.4803900,q:"Giardino degli Aranci, Roma",note:"Free panoramic view + the famous keyhole.",metro:null,walkNote:"~10 min uphill walk",leg:"walking · ~10 min",
+    food:"Quiet residential hill with no restaurants — carry water; Testaccio is a 12 min walk downhill.",
+    vegan:"Trapizzino in Testaccio: the eggplant and cicoria fillings are vegan."},
+  {id:"d1s5",name:"Trattoria Da Enzo (dinner)",time:"7:00 PM",lat:41.8880847,lng:12.4778554,note:"No reservations — arrive ~30 min early to queue.",metro:null,walkNote:"15 min walk, or Bus H",leg:"walk/bus · ~15 min",meal:true,q:"Trattoria Da Enzo al 29, Via dei Vascellari 29, Roma",
+    vegan:"Limited here — spaghetti al pomodoro, puntarelle in season, bruschetta. For a full vegan meal go to Pizzeria Ai Marmi (vegan marinara) 6 min away, or Grezzo Raw for dessert."}
+]},
+{day:2,date:"Sun Sep 14",title:"Vatican",stops:[
+  {id:"d2s1",name:"St Peter's Basilica",time:"8:00 AM",lat:41.9021667,lng:12.4539367,q:"Basilica di San Pietro, Vaticano",note:"Free entry — dress code applies.",metro:{station:"Ottaviano-San Pietro",line:"A"},
+    food:"Nothing good by the colonnade; the Borgo Pio pedestrian lane (3 min) has cafés.",
+    vegan:"Universo Vegano on Via Leone IV — quick vegan panini and bowls, ~8 min."},
+  {id:"d2s2",name:"Vatican Museums & Sistine Chapel",time:"10:00 AM",lat:41.9064878,lng:12.4536413,q:"Musei Vaticani, Vaticano",note:"Paid — book a timed ticket ahead of time.",metro:{station:"Cipro",line:"A"},leg:"walking · ~8 min",
+    food:"Exit onto Viale Vaticano and head into Prati to eat.",
+    vegan:"Pizzarium Bonci (Via della Meloria) does excellent veg tomato slices without cheese."},
+  {id:"d2s3",name:"The Flower Burger (lunch)",time:"1:00 PM",lat:41.907841,lng:12.462157,note:"Fully vegan burgers.",metro:{station:"Lepanto",line:"A"},leg:"walking · ~10 min",meal:true,q:"Flower Burger, Via dei Gracchi 87, Roma",
+    vegan:"Entire menu is vegan — the Cheesy Cheese burger with sweet-potato fries is the pick."},
+  {id:"d2s4",name:"Castel Sant'Angelo",time:"2:30 PM",lat:41.9030632,lng:12.4662760,q:"Castel Sant'Angelo, Roma",note:"Free to admire from the angel-lined bridge.",metro:{station:"Lepanto",line:"A"},walkNote:"~12 min walk",leg:"walking · ~12 min",
+    food:"Cross the angel bridge into the centro for gelato and aperitivo.",
+    vegan:"Gelateria del Teatro on Via dei Coronari lists several vegan sorbets."},
+  {id:"d2meal2",name:"Dinner · Il Sorpasso (Prati)",time:"7:30 PM",lat:41.9057,lng:12.4610,meal:true,q:"Il Sorpasso, Via Properzio 31, Roma",
+    note:"Lively Prati wine-bar and kitchen, ~9 min from Castel Sant'Angelo. Book ahead.",
+    vegan:"Seasonal vegetable pasta, hummus, grilled vegetables, bruschette; skip the cured-meat boards.",
+    metro:{station:"Ottaviano-San Pietro",line:"A"},walkNote:"~9 min from Castel Sant'Angelo",leg:"walking · ~9 min"}
+]},
+{day:3,date:"Mon Sep 15",title:"Centro Storico & Villa Borghese",stops:[
+  {id:"d3s1",name:"Trevi Fountain",time:"8:00 AM",lat:41.9009325,lng:12.4833130,q:"Fontana di Trevi, Roma",note:"Go before 8am to beat the crowds.",metro:{station:"Barberini",line:"A"},walkNote:"~10 min walk",
+    food:"Everything at the fountain is overpriced — walk toward the Pantheon to eat.",
+    vegan:"Venchi on Via degli Orfani has vegan gelato and sorbet."},
+  {id:"d3s2",name:"Pantheon",time:"9:00 AM",lat:41.8986108,lng:12.4768729,q:"Pantheon, Roma",note:"Free entry, famous oculus.",metro:null,walkNote:"~10 min walk from Trevi",leg:"walking · ~10 min",
+    food:"The Piazza della Rotonda terraces are a tourist tax; go one street back.",
+    vegan:"Ginger on Piazza Sant'Eustachio labels its vegan dishes; sorbet at the nearby gelaterie."},
+  {id:"d3s3",name:"Piazza Navona",time:"10:00 AM",lat:41.8991633,lng:12.4730742,q:"Piazza Navona, Roma",note:"Free baroque square, Bernini fountain.",metro:null,walkNote:"~5 min walk",leg:"walking · ~5 min",
+    food:"Skip the square's restaurants; Cul de Sac wine bar at the south-west corner is better value.",
+    vegan:"Hummus, caponata, lentil and bean plates, bruschetta."},
+  {id:"d3s4",name:"Spanish Steps",time:"12:00 PM",lat:41.9059900,lng:12.4827750,q:"Piazza di Spagna, Roma",note:"Free to climb.",metro:{station:"Spagna",line:"A"},leg:"walking · ~15 min",
+    food:"Via della Croce and Via Margutta have the restaurants.",
+    vegan:"Il Margutta (veg institution) and Ginger on Via Borgognona."},
+  {id:"d3s5",name:"Piazza del Popolo",time:"1:00 PM",lat:41.9110163,lng:12.4762093,q:"Piazza del Popolo, Roma",note:"Free monumental square.",metro:{station:"Flaminio",line:"A"},leg:"walking · ~10 min",
+    food:"Rosati and Canova on the square are historic but pricey.",
+    vegan:"Il Margutta is 5 min south-east; Pompi does a vegan tiramisù to go."},
+  {id:"d3meal1",name:"Lunch · Il Margutta RistorArte",time:"1:30 PM",lat:41.9090,lng:12.4779,meal:true,q:"Il Margutta RistorArte, Via Margutta 118, Roma",
+    note:"Rome's famous vegetarian restaurant near the Spanish Steps — art on the walls, good-value weekday lunch buffet. Book ahead.",
+    vegan:"Large dedicated vegan selection — ask for the vegan menu; buffet dishes are marked.",
+    metro:{station:"Spagna",line:"A"},walkNote:"~5 min from Piazza del Popolo",leg:"walking · ~5 min"},
+  {id:"d3s6",name:"Villa Borghese & Pincio Terrace",time:"5:30 PM",lat:41.9142,lng:12.4845,q:"Terrazza del Pincio, Roma",note:"Rome's best free sunset view over St Peter's dome.",metro:{station:"Flaminio",line:"A"},walkNote:"enter via Pincio stairs",leg:"walking · ~10 min",
+    food:"Only kiosk bars inside the park — bring a snack for the sunset.",
+    vegan:"Kiosks have fruit and plain sorbet; eat properly before or after."},
+  {id:"d3meal2",name:"Dinner · Ginger (by the Pantheon)",time:"7:30 PM",lat:41.8986,lng:12.4749,meal:true,q:"Ginger Sapori e Salute, Piazza di Sant'Eustachio 54, Roma",
+    note:"Bright all-day place right by the Pantheon — bowls, pastas, juices. No booking; fast turnover.",
+    vegan:"Vegan dishes are clearly marked — grain bowls, vegan lasagna, chickpea and lentil plates.",
+    metro:null,walkNote:"next to the Pantheon",leg:"walking · ~10 min from the Pincio"}
+]},
+{day:4,date:"Tue Sep 16",title:"Trastevere, Janiculum & Testaccio",stops:[
+  {id:"d4s1",name:"Janiculum Hill",time:"9:30 AM",lat:41.8914697,lng:12.4613942,q:"Piazzale Giuseppe Garibaldi, Roma",note:"Wide free panoramic view, less crowded.",metro:null,walkNote:"Bus 115 from Trastevere, or 20 min walk",
+    food:"Only Bar Gianicolo at the top for coffee and cornetti (the plain ones are usually vegan).",
+    vegan:"Save the real meal for Trastevere at the bottom of the hill."},
+  {id:"d4s2",name:"Trastevere neighborhood",time:"11:00 AM",lat:41.8848294,lng:12.4704017,q:"Piazza di Santa Maria in Trastevere, Roma",note:"Free to wander — cobbled lanes, Santa Maria church.",metro:null,walkNote:"Tram 8 from Largo Argentina",leg:"tram/walk · ~15 min",
+    food:"The best eating zone of the trip — cobbled lanes full of trattorie and bakeries.",
+    vegan:"Pianostrada (veg-forward kitchen), Grezzo Raw for cakes, La Fonte della Salute and Fatamorgana for gelato, Pizzeria Ai Marmi for a cheap vegan marinara."},
+  {id:"d4s3",name:"Campo de' Fiori",time:"1:00 PM",lat:41.8956045,lng:12.4721757,q:"Campo de' Fiori, Roma",note:"Morning market till ~2pm.",metro:null,walkNote:"~15 min walk",leg:"walking · ~15 min",
+    food:"Market stalls run till about 2pm — fruit, olives, dried fruit; Forno Campo de' Fiori for pizza bianca and rossa.",
+    vegan:"Pizza rossa (no cheese) at the Forno; Emma pizzeria round the corner."},
+  {id:"d4meal1",name:"Lunch · Emma Pizzeria",time:"1:30 PM",lat:41.8952,lng:12.4737,meal:true,q:"Emma Pizzeria, Via Monte della Farina 28, Roma",
+    note:"Smart pizzeria a minute from Campo de' Fiori — thin Roman bases, quality toppings, open for lunch. Book ahead.",
+    vegan:"Pizza marinara, or a red pizza with vegetables and no mozzarella; bruschette.",
+    metro:null,walkNote:"~3 min from Campo de' Fiori",leg:"walking · ~3 min"},
+  {id:"d4s4",name:"Trapizzino (Testaccio)",time:"7:30 PM",lat:41.8796102,lng:12.4736352,note:"Cheap iconic street food — eggplant filling is vegan.",metro:{station:"Piramide",line:"B"},leg:"walking · ~20 min or Metro B",meal:true,q:"Trapizzino Roma, Via Giovanni Branca 88, Roma",
+    vegan:"The melanzane (eggplant) and cicoria/misticanza trapizzini are vegan; there's another branch at Piazza Trilussa in Trastevere."}
+]},
+{day:5,date:"Wed Sep 17",title:"Flex Day",stops:[
+  {id:"d5s1",name:"Colosseum (interior, optional)",time:"9:00 AM",lat:41.8902102,lng:12.4922309,q:"Colosseo, Roma",note:"Use your booked interior ticket if you have one.",metro:{station:"Colosseo",line:"B"},
+    food:"Afterwards head into Monti for lunch, same as Day 1.",
+    vegan:"Fatamorgana or Grezzo Raw for vegan sweets in Monti."},
+  {id:"d5s2",name:"Rifugio Romano (lunch)",time:"1:00 PM",lat:41.9044388,lng:12.4995988,note:"Fully vegan — try the carbonara or cacio e pepe.",metro:{station:"Termini",line:"A/B"},walkNote:"~8 min walk",leg:"walking · ~20 min or Metro B",meal:true,q:"Rifugio Romano, Via Volturno 39, Roma",
+    vegan:"Full separate vegan menu — vegan carbonara, cacio e pepe, amatriciana and tiramisù. Book ahead, it fills up."},
+  {id:"d5meal2",name:"Dinner · Mercato Centrale (Termini)",time:"7:30 PM",lat:41.9006,lng:12.5028,meal:true,q:"Mercato Centrale Roma, Via Giovanni Giolitti 36, Roma",
+    note:"Food hall inside Termini station — many stalls, open late, no booking; handy if you're packing or moving on.",
+    vegan:"Pasta al pomodoro, pizza marinara, and the juice and fruit bars are all vegan; Rifugio Romano nearby for another full vegan sit-down.",
+    metro:{station:"Termini",line:"A/B"},walkNote:"inside Termini station"}
+]}
+];
+
+let currentDay = 1;
+let map;
+const STORAGE_KEY = "romeTripChecklist";
+function getChecked(){ try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");}catch(e){return {};} }
+function setChecked(obj){ localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); }
+function stopQuery(s){ return s.q ? encodeURIComponent(s.q) : `${s.lat},${s.lng}`; }
+function gmapsView(s){ return `https://www.google.com/maps/search/?api=1&query=${stopQuery(s)}`; }
+function gmapsDir(from,to,mode){ return `https://www.google.com/maps/dir/?api=1&origin=${stopQuery(from)}&destination=${stopQuery(to)}&travelmode=${mode||'walking'}`; }
+
+function renderTabs(){
+  const nav = document.getElementById('tabs');
+  nav.innerHTML = '';
+  DATA.forEach(d=>{
+    const b = document.createElement('button');
+    b.textContent = 'Day '+d.day;
+    if(d.day===currentDay) b.className='active';
+    b.onclick = ()=>{ currentDay=d.day; renderAll(); };
+    nav.appendChild(b);
+  });
+}
+function renderMap(day){
+  const container = document.getElementById('map');
+  try{
+    if(map){ map.remove(); map = null; }   // tear the old map down so re-init works when switching days
+    container.innerHTML='';
+    if(typeof L === 'undefined') throw new Error('Leaflet failed to load');
+    map = L.map(container,{zoomControl:false}).setView([41.895,12.478],13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,
+      attribution:'&copy; OpenStreetMap'}).addTo(map);
+    const pts = day.stops.map(s=>[s.lat,s.lng]);
+    const bounds = L.latLngBounds(pts);
+    day.stops.forEach((s,i)=>{
+      L.circleMarker([s.lat,s.lng],{radius:9,fillColor:s.meal?'#a5672b':'#c1440e',fillOpacity:1,color:'#fff',weight:2})
+        .addTo(map).bindPopup(`<b>${i+1}. ${s.name}</b><br>${s.time}`);
+    });
+    L.polyline(pts,{color:'#c1440e',weight:3,dashArray:'6 6',opacity:.7}).addTo(map);
+    map.fitBounds(bounds,{padding:[24,24]});
+    setTimeout(()=>{ try{ map.invalidateSize(); }catch(e){} }, 60);  // fixes grey/half-drawn tiles
+  }catch(e){
+    console.warn('Map unavailable:', e);
+    map = null;
+    container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;'
+      + 'height:100%;padding:16px;text-align:center;font-size:12.5px;color:#8a8072;">'
+      + 'Map unavailable right now — use the “Open in Maps” buttons on each stop below.</div>';
+  }
+}
+function renderStops(day){
+  const wrap = document.getElementById('stops');
+  wrap.innerHTML='';
+  const checked = getChecked();
+  day.stops.forEach((s,i)=>{
+    if(i>0 && s.leg){
+      const leg = document.createElement('div');
+      leg.className='leg';
+      leg.textContent = '↓ '+s.leg;
+      wrap.appendChild(leg);
+    }
+    const el = document.createElement('div');
+    el.className = 'stop'+(s.meal?' meal':'')+(checked[s.id]?' done':'');
+    let badges = '';
+    if(s.meal){
+      badges += `<span class="badge meal">🍴 Food stop</span>`;
+    }
+    if(s.metro){
+      const color = s.metro.line==='B' ? '#1f6fb2' : (s.metro.line==='A/B'?'#8a4fae':'#e07b00');
+      badges += `<span class="badge" style="background:${color}">Ⓜ️ ${s.metro.station} · Line ${s.metro.line}</span>`;
+    }
+    if(s.walkNote){
+      badges += `<span class="badge walk">🚶 ${s.walkNote}</span>`;
+    }
+    const prev = day.stops[i-1];
+    el.innerHTML = `
+      <div class="check ${checked[s.id]?'checked':''}" data-id="${s.id}">${checked[s.id]?'✓':''}</div>
+      <div class="stop-top"><p class="stop-name">${i+1}. ${s.name}</p><span class="stop-time">${s.time}</span></div>
+      ${s.note ? `<p class="stop-note">${s.note}</p>` : ''}
+      ${s.food ? `<p class="stop-food">🍽️ ${s.food}</p>` : ''}
+      ${s.vegan ? `<p class="stop-vegan"><b>🌱 Vegan:</b> ${s.vegan}</p>` : ''}
+      <div>${badges}</div>
+      <div class="actions">
+        <a class="btn-map" href="${gmapsView(s)}" target="_blank" rel="noopener">📍 Open in Maps</a>
+        ${prev ? `<a class="btn-dir" href="${gmapsDir(prev,s)}" target="_blank" rel="noopener">↗ Directions here</a>` : ''}
+      </div>
+    `;
+    wrap.appendChild(el);
+  });
+  wrap.querySelectorAll('.check').forEach(c=>{
+    c.onclick = ()=>{
+      const id = c.dataset.id;
+      const st = getChecked();
+      st[id] = !st[id];
+      setChecked(st);
+      renderStops(day);
+    };
+  });
+}
+function renderAll(){
+  const day = DATA.find(d=>d.day===currentDay);
+  renderTabs();
+  document.getElementById('daytitle').textContent = `Day ${day.day} · ${day.date} — ${day.title}`;
+  renderStops(day);   // itinerary + food list first, so it shows even if the map can't
+  renderMap(day);
+}
+renderAll();
+</script>
+<script>
+// Register the service worker so the app shell works offline after first load.
+// Auto-reload once when a new version takes over, so you never get stuck on a cached page.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    var hadController = !!navigator.serviceWorker.controller;
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (hadController && !reloaded) { reloaded = true; window.location.reload(); }
+    });
+    navigator.serviceWorker.register('sw.js')
+      .then(function (reg) { reg.update(); })
+      .catch(function (err) { console.warn('Service worker registration failed:', err); });
+  });
+}
+</script>
+</body>
+</html>
