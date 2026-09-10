@@ -63,6 +63,14 @@
   .check.checked{background:var(--terracotta);border-color:var(--terracotta);color:#fff;
     display:flex;align-items:center;justify-content:center;font-size:13px;}
   .leg{text-align:center;font-size:11.5px;color:#8a8072;margin:-2px 0 10px 4px;}
+  .eats{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin:16px 0 8px;}
+  .eats h3{margin:0 0 4px 0;font-size:14px;color:var(--terracotta);}
+  .eats-sub{margin:0 0 6px 0;font-size:11.5px;color:#8a8072;line-height:1.35;}
+  .eat{padding:9px 0;border-top:1px solid var(--border);}
+  .eat-name{font-size:13.5px;font-weight:700;}
+  .eat-meta{font-size:11.5px;color:#8a8072;font-weight:600;margin-left:7px;}
+  .eat-why{font-size:12px;color:#5a5049;margin:3px 0 5px 0;line-height:1.38;}
+  .eat a{font-size:12px;font-weight:700;color:var(--terracotta);text-decoration:none;}
 </style>
 </head>
 <body>
@@ -102,6 +110,14 @@ const DATA = [
     vegan:"Trapizzino in Testaccio: the eggplant and cicoria fillings are vegan."},
   {id:"d1s5",name:"Trattoria Da Enzo (dinner)",time:"7:00 PM",lat:41.8880847,lng:12.4778554,note:"No reservations — arrive ~30 min early to queue.",metro:null,walkNote:"15 min walk, or Bus H",leg:"walk/bus · ~15 min",meal:true,q:"Trattoria Da Enzo al 29, Via dei Vascellari 29, Roma",
     vegan:"Limited here — spaghetti al pomodoro, puntarelle in season, bruschetta. For a full vegan meal go to Pizzeria Ai Marmi (vegan marinara) 6 min away, or Grezzo Raw for dessert."}
+],
+eats:[
+  {name:"Alle Carrette",kind:"pizza",price:"€8–14",why:"Classic thin Roman pizza in Monti, wood oven, decades old. No booking — go early; cash preferred.",q:"Pizzeria Alle Carrette, Via della Madonna dei Monti 95, Roma"},
+  {name:"La Carbonara",kind:"osteria",price:"€12–20",why:"On Via Panisperna since 1960 — carbonara, amatriciana, scaloppine. Book ahead.",q:"La Carbonara, Via Panisperna 214, Roma"},
+  {name:"Zia Rosetta",kind:"panini",price:"€6–10",why:"Mini gourmet sandwiches (veg/vegan options) in Monti — quick lunch.",q:"Zia Rosetta, Via Urbana 54, Roma"},
+  {name:"Mordi e Vai",kind:"street food",price:"€4–5",why:"Cult braised-beef and veg rolls from a stall in Testaccio market. Mon–Sat, lunch only.",q:"Mordi e Vai, Mercato di Testaccio, Roma"},
+  {name:"Pizzeria Da Remo",kind:"pizza",price:"€6–12",why:"Chaotic, cheap, paper-thin pizza in Testaccio. From 7pm, cash only, expect a queue.",q:"Pizzeria Da Remo, Piazza di Santa Maria Liberatrice 44, Roma"},
+  {name:"Trattoria Da Teo",kind:"trattoria",price:"€12–20",why:"Romans cooking for Romans in Trastevere — the sit-down backup to Da Enzo. Book ahead.",q:"Trattoria Da Teo, Piazza dei Ponziani 7, Roma"}
 ]},
 {day:2,date:"Sun Sep 14",title:"Vatican",stops:[
   {id:"d2home",name:"🏠 Base · Viale Giulio Agricola 33",time:"7:15 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Easy today: Metro A ‘Giulio Agricola’ direct to ‘Ottaviano–San Pietro’ (dir. Battistini), no changes. Leave early to beat the St Peter's security queue.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
@@ -120,6 +136,12 @@ const DATA = [
     note:"Lively Prati wine-bar and kitchen, ~9 min from Castel Sant'Angelo. Book ahead.",
     vegan:"Seasonal vegetable pasta, hummus, grilled vegetables, bruschette; skip the cured-meat boards.",
     metro:{station:"Ottaviano-San Pietro",line:"A"},walkNote:"~9 min from Castel Sant'Angelo",leg:"walking · ~9 min"}
+],
+eats:[
+  {name:"Fa-Bio",kind:"sandwiches / salads",price:"€5–8",why:"Organic sandwich bar two minutes from the Museums entrance — eat well from €5. Tiny, takeaway, packed at lunch.",q:"Fa-Bio, Via Germanico 43, Roma"},
+  {name:"Duecento Gradi",kind:"panini",price:"€6–9",why:"Big creative sandwiches (veg options) at Piazza Risorgimento by the Vatican walls.",q:"Duecento Gradi, Piazza Risorgimento 3, Roma"},
+  {name:"Pizzarium Bonci",kind:"pizza al taglio",price:"€6–12",why:"Rome's most famous pizza-by-weight, near Cipro metro. Dearer per kilo than average — still worth it. Standing only.",q:"Pizzarium, Via della Meloria 43, Roma"},
+  {name:"Mondo Arancina",kind:"fried rice balls",price:"€3–6",why:"Cheap Sicilian arancine and fritti in Prati, open late.",q:"Mondo Arancina, Via Marcantonio Colonna 38, Roma"}
 ]},
 {day:3,date:"Mon Sep 15",title:"Centro Storico & Villa Borghese",stops:[
   {id:"d3home",name:"🏠 Base · Viale Giulio Agricola 33",time:"7:20 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Metro A ‘Giulio Agricola’ direct to ‘Barberini’ (dir. Battistini), then 4 min downhill to the Trevi Fountain.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
@@ -153,6 +175,14 @@ const DATA = [
     note:"Bright all-day place right by the Pantheon — bowls, pastas, juices. No booking; fast turnover.",
     vegan:"Vegan dishes are clearly marked — grain bowls, vegan lasagna, chickpea and lentil plates.",
     metro:null,walkNote:"next to the Pantheon",leg:"walking · ~10 min from the Pincio"}
+],
+eats:[
+  {name:"Pastificio Guerra",kind:"fresh pasta",price:"€4",why:"Since 1918 — two pasta dishes a day, €4, eaten standing on Via della Croce by the Spanish Steps. From ~1pm till it runs out. Cash.",q:"Pastificio Guerra, Via della Croce 8, Roma"},
+  {name:"Trattoria Gino al Parlamento",kind:"trattoria",price:"€12–20",why:"Home-style Roman cooking near the Pantheon, a local institution. Book or arrive at opening; cash only.",q:"Trattoria Gino, Vicolo Rosini 4, Roma"},
+  {name:"Antica Birreria Peroni",kind:"beer hall",price:"€10–16",why:"1906 canteen near Trevi — sausages, cotoletta, pasta, cheap draught Peroni. No booking, shared tables.",q:"Antica Birreria Peroni, Via di San Marcello 19, Roma"},
+  {name:"Lo Zozzone",kind:"stuffed pizza bianca",price:"€5–8",why:"Fill a pizza bianca with whatever you point at, just behind Piazza Navona.",q:"Lo Zozzone, Via del Teatro Pace 32, Roma"},
+  {name:"Gelateria del Teatro",kind:"gelato",price:"€3–4",why:"Natural-ingredient gelato with lots of vegan sorbets, on Via dei Coronari.",q:"Gelateria del Teatro, Via dei Coronari 65, Roma"},
+  {name:"Il Gelato di San Crispino",kind:"gelato",price:"€3–4",why:"Serious gelato (cups only, no cones) a few streets from the Trevi Fountain.",q:"Il Gelato di San Crispino, Via della Panetteria 42, Roma"}
 ]},
 {day:4,date:"Tue Sep 16",title:"Trastevere, Janiculum & Testaccio",stops:[
   {id:"d4home",name:"🏠 Base · Viale Giulio Agricola 33",time:"8:30 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Trickiest morning: Metro A to Termini, then tram 8 / bus toward Trastevere and bus 115 up the hill — allow ~50 min. A taxi is ~€22 and ~25 min.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
@@ -171,6 +201,14 @@ const DATA = [
     metro:null,walkNote:"~3 min from Campo de' Fiori",leg:"walking · ~3 min"},
   {id:"d4s4",name:"Trapizzino (Testaccio)",time:"7:30 PM",lat:41.8796102,lng:12.4736352,note:"Cheap iconic street food — eggplant filling is vegan.",metro:{station:"Piramide",line:"B"},leg:"walking · ~20 min or Metro B",meal:true,q:"Trapizzino Roma, Via Giovanni Branca 88, Roma",
     vegan:"The melanzane (eggplant) and cicoria/misticanza trapizzini are vegan; there's another branch at Piazza Trilussa in Trastevere."}
+],
+eats:[
+  {name:"Trattoria da Augusto",kind:"trattoria",price:"€10–18",why:"Cash-only nonna cooking on Piazza de' Renzi in Trastevere — paper cloths, daily specials, no bookings, join the queue.",q:"Trattoria da Augusto, Piazza de' Renzi 15, Roma"},
+  {name:"Supplì Roma",kind:"fried supplì",price:"€2–4",why:"Hole-in-the-wall on Via San Francesco a Ripa doing the city's benchmark supplì and fried cod. Takeaway, cash.",q:"Suppli Roma, Via di San Francesco a Ripa 137, Roma"},
+  {name:"Forno La Renella",kind:"bakery",price:"€3–6",why:"Wood-fired pizza bianca and slices in Trastevere since 1870 — point and go.",q:"Forno La Renella, Via del Moro 15, Roma"},
+  {name:"Dar Filettaro a Santa Barbara",kind:"fried cod",price:"€5",why:"Almost a century of one dish: battered salt-cod fillet, ~€5, on tiny Largo dei Librari near Campo de' Fiori. Evenings, cash.",q:"Dar Filettaro a Santa Barbara, Largo dei Librari 88, Roma"},
+  {name:"Forno Campo de' Fiori",kind:"bakery",price:"€3–5",why:"The pizza bianca / pizza rossa benchmark, right on the market square.",q:"Forno Campo de' Fiori, Vicolo del Gallo 14, Roma"},
+  {name:"Pizzeria Ai Marmi",kind:"pizza",price:"€8–14",why:"Marble tables, brisk service, classic thin pizza and fritti on Viale di Trastevere. Evenings, cash.",q:"Pizzeria Ai Marmi, Viale di Trastevere 53, Roma"}
 ]},
 {day:5,date:"Wed Sep 17",title:"Flex Day",stops:[
   {id:"d5home",name:"🏠 Base · Viale Giulio Agricola 33",time:"8:15 AM",lat:41.8593,lng:12.5628,q:"Viale Giulio Agricola 33, 00174 Roma",home:true,note:"Flex day. For the Colosseum: Metro A to Termini, change to Line B, off at Colosseo. Rifugio Romano and Mercato Centrale later are both a short hop from Termini on Line A.",metro:{station:"Giulio Agricola",line:"A"},walkNote:"2 min to Metro A"},
@@ -183,6 +221,13 @@ const DATA = [
     note:"Food hall inside Termini station — many stalls, open late, no booking; handy if you're packing or moving on.",
     vegan:"Pasta al pomodoro, pizza marinara, and the juice and fruit bars are all vegan; Rifugio Romano nearby for another full vegan sit-down.",
     metro:{station:"Termini",line:"A/B"},walkNote:"inside Termini station"}
+],
+eats:[
+  {name:"Trattoria Monti",kind:"trattoria",price:"€14–22",why:"Marche-Roman family cooking near Vittorio Emanuele — the fried egg-yolk tortello is the one. Small; book.",q:"Trattoria Monti, Via di San Vito 13a, Roma"},
+  {name:"Pasta Chef",kind:"fresh pasta to go",price:"€6–9",why:"Cheap, quick carbonara / gricia in a box, near the Forum in Monti.",q:"Pasta Chef Monti, Via Baccina 42, Roma"},
+  {name:"Er Buchetto",kind:"porchetta",price:"€5–7",why:"One-room porchetta joint near Termini since 1890 — a panino and a glass of wine. Lunch only, cash.",q:"Er Buchetto, Via del Viminale 2f, Roma"},
+  {name:"Da Valentino",kind:"trattoria",price:"€12–18",why:"Old wood-panelled Monti place known for grilled scamorza — local and unfussy.",q:"Da Valentino, Via del Boschetto 37, Roma"},
+  {name:"Panella",kind:"bakery / rosticceria",price:"€4–8",why:"Grand Esquilino bakery on Via Merulana — slices, supplì, pastries; good for a train picnic.",q:"Panella, Via Merulana 54, Roma"}
 ]}
 ];
 
@@ -272,6 +317,18 @@ function renderStops(day){
     `;
     wrap.appendChild(el);
   });
+  if(day.eats && day.eats.length){
+    const box = document.createElement('div');
+    box.className = 'eats';
+    box.innerHTML = '<h3>🍴 Cheap local eats near this route</h3>'
+      + '<p class="eats-sub">Well reviewed, local, wallet-friendly. Many are cash-only and don’t take bookings — check days/hours first.</p>'
+      + day.eats.map(e=>`<div class="eat">
+          <div><span class="eat-name">${e.name}</span><span class="eat-meta">${e.kind} · ${e.price}</span></div>
+          <div class="eat-why">${e.why}</div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.q)}" target="_blank" rel="noopener">📍 Open in Maps</a>
+        </div>`).join('');
+    wrap.appendChild(box);
+  }
   wrap.querySelectorAll('.check').forEach(c=>{
     c.onclick = ()=>{
       const id = c.dataset.id;
